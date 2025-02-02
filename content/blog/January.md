@@ -1,7 +1,7 @@
 +++
 date = '2025-02-02T13:25:08-08:00'
-draft = true
-title = 'Janurary'
+draft = false
+title = 'January'
 +++
 
 # January 2025
