@@ -6,9 +6,9 @@ media_folder: "static/img"  # Where uploaded images go
 public_folder: "/img"       # The path used in markdown
 
 collections:
-  - name: "posts"
+  - name: "blog"
     label: "Posts"
-    folder: "content/posts"
+    folder: "content/blog"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
