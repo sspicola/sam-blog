@@ -1,3 +1,56 @@
-  <!-- A partial to be overwritten by the user.
-  Simply place a custom_body.html into
-  your local /layouts/partials-directory -->
+<script>
+  document.addEventListener('scroll', function () {
+    const header = document.querySelector('header');
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>
+
+<!-- Mood Bear Floating Widget -->
+<div id="mood-bear" title="Click me for a mood change!"></div>
+
+<script>
+  (function() {
+    const moods = ["Happy", "Sleepy", "Excited", "Curious", "Silly", "Grumpy", "Zen"];
+    const moodBear = document.getElementById('mood-bear');
+    // Initial mood
+    moodBear.innerText = moods[Math.floor(Math.random() * moods.length)];
+    moodBear.addEventListener('click', function () {
+      moodBear.innerText = moods[Math.floor(Math.random() * moods.length)];
+    });
+  })();
+</script>
+
+<script>
+  document.querySelector('.title').addEventListener('click', function() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  });
+</script>
+
+<script>
+  const toggleButton = document.getElementById('theme-toggle');
+  toggleButton.addEventListener('click', function() {
+    // Toggle a custom class on <html> or <body>
+    document.documentElement.classList.toggle('dark-mode');
+  });
+</script>
