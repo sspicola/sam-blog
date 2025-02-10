@@ -1,4 +1,7 @@
 <a href="{{ "" | relURL }}" class="title logo">
   <h2>{{ .Site.Title }}</h2>
 </a>
-<nav>{{- partial "nav.html" . -}}</nav>
+<nav>
+  {{- partial "nav.html" . -}}
+</nav>
+<button id="theme-toggle" title="Toggle Light/Dark Mode">🌙</button>

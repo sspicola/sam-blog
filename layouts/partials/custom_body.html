@@ -1,4 +1,5 @@
 <script>
+  // Header scroll effect
   document.addEventListener('scroll', function () {
     const header = document.querySelector('header');
     if (window.scrollY > 50) {
@@ -13,10 +14,11 @@
 <div id="mood-bear" title="Click me for a mood change!"></div>
 
 <script>
+  // Mood Bear: Display a random mood on click.
   (function() {
     const moods = ["Happy", "Sleepy", "Excited", "Curious", "Silly", "Grumpy", "Zen"];
     const moodBear = document.getElementById('mood-bear');
-    // Initial mood
+    // Set initial mood text over the bear image
     moodBear.innerText = moods[Math.floor(Math.random() * moods.length)];
     moodBear.addEventListener('click', function () {
       moodBear.innerText = moods[Math.floor(Math.random() * moods.length)];
@@ -25,16 +27,25 @@
 </script>
 
 <script>
-  document.querySelector('.title').addEventListener('click', function() {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
+  // Confetti effect on header title click
+  document.addEventListener("DOMContentLoaded", function() {
+    const titleElement = document.querySelector('.title');
+    if (titleElement) {
+      titleElement.addEventListener('click', function() {
+        if (typeof confetti === "function") {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      });
+    }
   });
 </script>
 
 <script>
+  // Fade in elements on scroll using IntersectionObserver
   document.addEventListener("DOMContentLoaded", function() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -48,9 +59,13 @@
 </script>
 
 <script>
-  const toggleButton = document.getElementById('theme-toggle');
-  toggleButton.addEventListener('click', function() {
-    // Toggle a custom class on <html> or <body>
-    document.documentElement.classList.toggle('dark-mode');
+  // Dark Mode Toggle – ensure there is an element with id="theme-toggle" in your header
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggleButton = document.getElementById('theme-toggle');
+    if (toggleButton) {
+      toggleButton.addEventListener('click', function() {
+        document.documentElement.classList.toggle('dark-mode');
+      });
+    }
   });
 </script>
