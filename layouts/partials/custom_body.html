@@ -1,6 +1,6 @@
 <script>
   // Header scroll effect
-  document.addEventListener('scroll', function () {
+  document.addEventListener('scroll', function() {
     const header = document.querySelector('header');
     if (window.scrollY > 50) {
       header.classList.add('scrolled');
@@ -8,26 +8,8 @@
       header.classList.remove('scrolled');
     }
   });
-</script>
-
-<!-- Mood Bear Floating Widget -->
-<div id="mood-bear" title="Click me for a mood change!"></div>
-
-<script>
-  // Mood Bear: Display a random mood on click.
-  (function() {
-    const moods = ["Happy", "Sleepy", "Excited", "Curious", "Silly", "Grumpy", "Zen"];
-    const moodBear = document.getElementById('mood-bear');
-    // Set initial mood text over the bear image
-    moodBear.innerText = moods[Math.floor(Math.random() * moods.length)];
-    moodBear.addEventListener('click', function () {
-      moodBear.innerText = moods[Math.floor(Math.random() * moods.length)];
-    });
-  })();
-</script>
-
-<script>
-  // Confetti effect on header title click
+  
+  // Confetti effect on header title click (requires confetti library)
   document.addEventListener("DOMContentLoaded", function() {
     const titleElement = document.querySelector('.title');
     if (titleElement) {
@@ -42,10 +24,8 @@
       });
     }
   });
-</script>
-
-<script>
-  // Fade in elements on scroll using IntersectionObserver
+  
+  // Fade-in animation for elements
   document.addEventListener("DOMContentLoaded", function() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -56,16 +36,47 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   });
-</script>
-
-<script>
-  // Dark Mode Toggle – ensure there is an element with id="theme-toggle" in your header
+  
+  // Search overlay functionality
   document.addEventListener("DOMContentLoaded", function() {
-    const toggleButton = document.getElementById('theme-toggle');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', function() {
-        document.documentElement.classList.toggle('dark-mode');
+    const searchToggle = document.getElementById('search-toggle');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchClose = document.getElementById('search-close');
+    if (searchToggle && searchOverlay && searchClose) {
+      searchToggle.addEventListener('click', function() {
+        searchOverlay.classList.add('active');
+        document.getElementById('search-input').focus();
+      });
+      searchClose.addEventListener('click', function() {
+        searchOverlay.classList.remove('active');
       });
     }
   });
-</script>
+  
+  // Back-to-top button functionality
+  document.addEventListener("DOMContentLoaded", function() {
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+  </script>
+  
+  <!-- Search Overlay -->
+  <div id="search-overlay">
+    <div class="search-container">
+      <button id="search-close" title="Close Search">&times;</button>
+      <input type="text" id="search-input" placeholder="Search..." />
+    </div>
+  </div>
+  
+  <!-- Back to Top Button -->
+  <button id="back-to-top" title="Back to Top">&#8679;</button>
+  
