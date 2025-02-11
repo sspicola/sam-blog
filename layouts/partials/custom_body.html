@@ -1,70 +1,205 @@
 <script>
-  // Header scroll effect
-  document.addEventListener('scroll', function() {
-    const header = document.querySelector('header');
-    if (window.scrollY > 50) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
+  // Matrix background effect
+  class MatrixEffect {
+    constructor() {
+      this.canvas = document.createElement('canvas');
+      this.ctx = this.canvas.getContext('2d');
+      this.canvas.style.position = 'fixed';
+      this.canvas.style.top = '0';
+      this.canvas.style.left = '0';
+      this.canvas.style.zIndex = '-1';
+      this.canvas.style.opacity = '0.1';
+      document.body.appendChild(this.canvas);
+      
+      this.resize();
+      window.addEventListener('resize', () => this.resize());
+      
+      this.characters = '01';
+      this.drops = [];
+      this.init();
+      this.animate();
     }
-  });
+    
+    init() {
+      this.drops = [];
+      const columns = Math.floor(this.canvas.width / 20);
+      for(let i = 0; i < columns; i++) {
+        this.drops[i] = Math.random() * -100;
+      }
+    }
+    
+    animate() {
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      
+      this.ctx.fillStyle = '#0F0';
+      this.ctx.font = '15px monospace';
+      
+      for(let i = 0; i < this.drops.length; i++) {
+        const char = this.characters.charAt(Math.floor(Math.random() * this.characters.length));
+        this.ctx.fillText(char, i * 20, this.drops[i] * 20);
+        
+        if(this.drops[i] * 20 > this.canvas.height && Math.random() > 0.975) {
+          this.drops[i] = 0;
+        }
+        this.drops[i]++;
+      }
+      requestAnimationFrame(() => this.animate());
+    }
+    
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+      this.init();
+    }
+  }
   
-  // Confetti effect on header title click (requires confetti library)
-  document.addEventListener("DOMContentLoaded", function() {
+  // Initialize all effects when DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize matrix effect
+    new MatrixEffect();
+    
+    // Add pixel trail effect to cursor
+    const cursor = document.createElement('div');
+    cursor.className = 'cursor-trail';
+    document.body.appendChild(cursor);
+    
+    let particles = [];
+    
+    document.addEventListener('mousemove', (e) => {
+      // Update main cursor
+      cursor.style.left = e.pageX + 'px';
+      cursor.style.top = e.pageY + 'px';
+      
+      // Create new particle
+      const particle = document.createElement('div');
+      particle.className = 'cursor-particle';
+      particle.style.left = e.pageX + 'px';
+      particle.style.top = e.pageY + 'px';
+      document.body.appendChild(particle);
+      
+      // Remove particle after animation
+      setTimeout(() => {
+        particle.remove();
+      }, 500);
+    });
+  
+    // Add hover sound effect to links
+    const hoverSound = document.getElementById('hoverSound');
+    if (hoverSound) {
+      const links = document.querySelectorAll('a');
+      links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          hoverSound.currentTime = 0;
+          hoverSound.volume = 0.2;
+          hoverSound.play().catch(() => {
+            // Ignore autoplay errors
+          });
+        });
+      });
+    }
+  
+    // Enhanced confetti effect for title
     const titleElement = document.querySelector('.title');
     if (titleElement) {
-      titleElement.addEventListener('click', function() {
-        if (typeof confetti === "function") {
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
+      titleElement.addEventListener('click', () => {
+        const colors = ['#00fff5', '#ff00ff', '#ff2a6d'];
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: colors,
+          shapes: ['square'],
+          gravity: 0.8,
+        });
+      });
+    }
+  
+    // Header scroll effect
+    let lastScrollY = window.scrollY;
+    const header = document.querySelector('header');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      lastScrollY = window.scrollY;
+    });
+  
+    // Search functionality
+    const searchToggle = document.getElementById('search-toggle');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchClose = document.getElementById('search-close');
+    const searchInput = document.getElementById('search-input');
+  
+    if (searchToggle && searchOverlay && searchClose && searchInput) {
+      searchToggle.addEventListener('click', () => {
+        searchOverlay.classList.add('active');
+        searchInput.focus();
+      });
+  
+      searchClose.addEventListener('click', () => {
+        searchOverlay.classList.remove('active');
+      });
+  
+      // Close search on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+          searchOverlay.classList.remove('active');
         }
       });
     }
-  });
   
-  // Fade-in animation for elements
-  document.addEventListener("DOMContentLoaded", function() {
+    // Back to top button
+    const backToTop = document.getElementById('back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+  
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+  
+    // Add glitch effect to blog post titles
+    const blogTitles = document.querySelectorAll('.blog-posts li a');
+    blogTitles.forEach(title => {
+      title.addEventListener('mouseenter', () => {
+        title.style.animation = 'glitch 0.3s infinite';
+      });
+      title.addEventListener('mouseleave', () => {
+        title.style.animation = 'none';
+      });
+    });
+  
+    // Add fade-in animation to content
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+  
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-  });
+    }, observerOptions);
   
-  // Search overlay functionality
-  document.addEventListener("DOMContentLoaded", function() {
-    const searchToggle = document.getElementById('search-toggle');
-    const searchOverlay = document.getElementById('search-overlay');
-    const searchClose = document.getElementById('search-close');
-    if (searchToggle && searchOverlay && searchClose) {
-      searchToggle.addEventListener('click', function() {
-        searchOverlay.classList.add('active');
-        document.getElementById('search-input').focus();
-      });
-      searchClose.addEventListener('click', function() {
-        searchOverlay.classList.remove('active');
-      });
-    }
-  });
-  
-  // Back-to-top button functionality
-  document.addEventListener("DOMContentLoaded", function() {
-    const backToTop = document.getElementById('back-to-top');
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 300) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    });
-    backToTop.addEventListener('click', function() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('content > *').forEach(element => {
+      element.classList.add('fade-in');
+      observer.observe(element);
     });
   });
   </script>
@@ -79,4 +214,3 @@
   
   <!-- Back to Top Button -->
   <button id="back-to-top" title="Back to Top">&#8679;</button>
-  
